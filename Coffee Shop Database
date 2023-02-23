@@ -1,0 +1,88 @@
+CREATE TABLE COFFEE_SHOP
+(
+	shop_id INTEGER PRIMARY KEY,
+	shop_name VARCHAR(50),
+	city VARCHAR(50),
+	state CHAR(2)
+);
+
+CREATE TABLE EMPLOYEE
+(
+	employee_id INTEGER PRIMARY KEY,
+	first_name VARCHAR(30),
+	last_name VARCHAR(30),
+	hire_date DATE,
+	job_title VARCHAR(30),
+    shop_id INTEGER REFERENCES COFFEE_SHOP(shop_id),
+);
+
+CREATE TABLE SUPPLIER
+(
+	supplier_id INTEGER PRIMARY KEY,
+	company_name VARCHAR(50),
+	country VARCHAR(30),
+	sales_contact_name VARCHAR(60),
+	email VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE COFFEE
+(
+	coffee_id INTEGER PRIMARY KEY,
+	coffee_name VARCHAR(30),
+	price_per_pound NUMERIC(5,2),
+    shop_id INTEGER REFERENCES COFFEE_SHOP(shop_id),
+    supplier_id INTEGER REFERENCES SUPPLIER(supplier_id),
+);
+
+ALTER TABLE EMPLOYEE
+ADD shop_id INTEGER,
+ADD FOREIGN KEY(shop_id) REFERENCES COFFEE_SHOP(shop_id);
+
+ALTER TABLE COFFEE
+ADD shop_id INTEGER,
+ADD supplier_id INTEGER,
+ADD FOREIGN KEY(supplier_id) REFERENCES SUPPLIER(supplier_id),
+ADD FOREIGN KEY(shop_id) REFERENCES COFFEE_SHOP(shop_id);
+
+INSERT INTO COFFEE_SHOP(shop_id, shop_name, city, state) 
+VALUES (8264,'Vibrance Coffee Shop NY', 'New York', 'NY'),
+(9647, 'Vibrance Coffee Shop CA', 'Los Angeles', 'CA'),
+(6503, 'Vibrance Coffee Shop FL', 'Miami', 'FL')
+
+INSERT INTO EMPLOYEE(employee_id, first_name, last_name, hire_date, job_title)
+VALUES(273, 'Barbara', 'Wilson', '2017-04-27', 'Team Lead'),
+(165, 'John', 'Matthews', '2019-07-16', 'Assistant Manager'),
+(486, 'Angela', 'Robinson', '2021-02-09', 'Graphic Designer');
+
+INSERT INTO COFFEE(coffee_id, coffee_name, price_per_pound)
+VALUES(735, 'Caramel Frappe', 12.95),
+(147, 'Cappuchino', 10.50),
+(038, 'Iced Coffee', 11.75);
+
+INSERT INTO SUPPLIER(supplier_id, company_name, country, sales_contact_name, email)
+VALUES (93548, 'These Beanz', 'United States', 'David Williams', 'dwilliams9@gmail.com'),
+(37551, 'Jumpee Coffee', 'Canada', 'Molly Harrison', 'mollyharrison@yahoo.com'),
+(79304, 'To Coffee, With Love', 'Ireland', 'Howard Richards', 'hrichards46@gmail.com')
+
+UPDATE EMPLOYEE
+SET shop_id = 8264 WHERE employee_id = 123;
+UPDATE EMPLOYEE
+SET shop_id = 9647 WHERE employee_id = 890;
+UPDATE EMPLOYEE
+SET shop_id = 6503 WHERE employee_id = 546;
+
+UPDATE COFFEE
+SET shop_id = 8264 WHERE coffee_id = 654;
+UPDATE COFFEE
+SET shop_id = 9647 WHERE coffee_id = 777;
+UPDATE COFFEE
+SET shop_id = 6503 WHERE coffee_id = 863;
+
+CREATE VIEW Full_names AS 
+SELECT CONCAT(first_name, ' ', last_name) AS employee_full_name, employee_id, hire_date, job_title, shop_id 
+FROM EMPLOYEE 
+WHERE first_name IS NOT NULL AND last_name IS NOT NULL; 
+
+CREATE INDEX coffee_index
+ON COFFEE (coffee_name);
+
