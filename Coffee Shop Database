@@ -34,16 +34,6 @@ CREATE TABLE COFFEE
     supplier_id INTEGER REFERENCES SUPPLIER(supplier_id),
 );
 
-ALTER TABLE EMPLOYEE
-ADD shop_id INTEGER,
-ADD FOREIGN KEY(shop_id) REFERENCES COFFEE_SHOP(shop_id);
-
-ALTER TABLE COFFEE
-ADD shop_id INTEGER,
-ADD supplier_id INTEGER,
-ADD FOREIGN KEY(supplier_id) REFERENCES SUPPLIER(supplier_id),
-ADD FOREIGN KEY(shop_id) REFERENCES COFFEE_SHOP(shop_id);
-
 INSERT INTO COFFEE_SHOP(shop_id, shop_name, city, state) 
 VALUES (8264,'Vibrance Coffee Shop NY', 'New York', 'NY'),
 (9647, 'Vibrance Coffee Shop CA', 'Los Angeles', 'CA'),
